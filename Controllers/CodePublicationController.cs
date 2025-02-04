@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Abstract;
+using API.Abstract.Service;
 using API.Contracts;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/publication")]
     public class CodePublicationController : ControllerBase
     {
         private readonly ICodePublicationService _codePublicationService;
@@ -31,6 +33,23 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<List<CodePublicationResponse>>> GetPublication(Guid id)
+        {
+            var publication = await _codePublicationService.GetPublication(id);
+
+            var response = new CodePublicationResponse(
+                publication.Id,
+                publication.Description,
+                publication.Code,
+                publication.Lang,
+                publication.PostedDate
+            );
+
+            return Ok(response);
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Guid>> CreatePublication([FromBody] CodePublicationRequest request)
         {
@@ -39,6 +58,10 @@ namespace API.Controllers
                 request.Description,
                 request.Code,
                 request.Lang,
+                request.rating,
+                request.creatorId, //Id должен получаться не из запроса, а из JWT токена
+                new User(),
+                /*_userService.Get(request.creatorId)*/
                 DateTime.Now.ToUniversalTime()
             );
 

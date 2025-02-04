@@ -8,13 +8,25 @@ namespace API.Models
     public class CodePublication
     {
         public CodePublication() { }
-        public CodePublication(Guid id, string description, string code, string lang, DateTime postedTime)
+        public CodePublication(
+            Guid id,
+            string description,
+            string code,
+            string lang,
+            decimal rating,
+            Guid creatorId,
+            User creator,
+            DateTime postedDate
+        )
         {
             Id = id;
             Description = description;
             Code = code;
             Lang = lang;
-            PostedDate = postedTime;
+            Rating = rating;
+            CreatorId = creatorId;
+            Creator = creator;
+            PostedDate = postedDate;
         }
 
         public Guid Id { get; set; }

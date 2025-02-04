@@ -1,23 +1,40 @@
 using API.Abstract;
+using API.Abstract.Auth;
+using API.Abstract.Repository;
+using API.Abstract.Service;
 using API.Data;
 using API.Data.Repository;
+using API.Extensions;
+using API.Infrastructure;
 using API.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<CodeReviewHubDbContext>(
+services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.AddDbContext<CodeReviewHubDbContext>(
     options => {
         options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(CodeReviewHubDbContext)));
     }
 );
 
-builder.Services.AddScoped<ICodePublicationRepository, CodePublicationRepository>();
-builder.Services.AddScoped<ICodePublicationService, CodePubicationService>();
+//builder.Ыervices.AddScoped<ICodePublicationRepository, CodePublicationRepository>();
+services.AddScoped<ICodePublicationRepository, CodePublicationRepository>();
+services.AddScoped<ICodePublicationService, CodePubicationService>();
+services.AddScoped<UsersRepository>();
+services.AddScoped<UsersService>();
+services.AddScoped<JwtProvider>();
+services.AddHttpContextAccessor();
+services.AddScoped<IPasswordHasher, PaswordHasher>();
+//services.AddApiAuthentification();
 
 var app = builder.Build();
 
@@ -28,6 +45,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

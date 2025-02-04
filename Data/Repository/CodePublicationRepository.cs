@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Abstract;
+using API.Abstract.Repository;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,12 +18,20 @@ namespace API.Data.Repository
             _context = context;
         }
 
-        public async Task<List<CodePublication>> Get()
+        public async Task<List<CodePublication>> GetAll()
         {
             var codePublications = await _context.CodePublications
                 .ToListAsync();
 
             return codePublications;
+        }
+
+        public async Task<CodePublication> Get(Guid id)
+        {
+            var codePublication = await _context.CodePublications
+                .FirstOrDefaultAsync(el => el.Id == id);
+
+            return codePublication;
         }
 
         public async Task<Guid> Create(CodePublication codePublication)

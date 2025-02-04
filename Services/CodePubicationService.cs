@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Abstract;
+using API.Abstract.Repository;
+using API.Abstract.Service;
 using API.Models;
 
 namespace API.Services
@@ -18,7 +20,12 @@ namespace API.Services
 
         public async Task<List<CodePublication>> GetAllPublications()
         {
-            return await _publicationRepository.Get();
+            return await _publicationRepository.GetAll();
+        }
+
+        public async Task<CodePublication> GetPublication(Guid id)
+        {
+            return await _publicationRepository.Get(id);
         }
 
         public async Task<Guid> CreatePublication(CodePublication codePublication)
