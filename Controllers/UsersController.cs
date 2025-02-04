@@ -37,7 +37,7 @@ namespace API.Controllers
             //_httpContext.HttpContext.Response.Cookies.Append("КУКИ!! СТЁПА УМЕР", token);
             _httpAccessor.HttpContext?.Response.Cookies.Append("ZOV", token);
 
-            return Ok(token);
+            return Ok();
         }
     }
 }
