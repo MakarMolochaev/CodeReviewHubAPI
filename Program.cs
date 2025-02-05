@@ -9,6 +9,7 @@ using API.Infrastructure;
 using API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -36,6 +37,10 @@ services.AddHttpContextAccessor();
 services.AddScoped<IPasswordHasher, PaswordHasher>();
 //services.AddApiAuthentification();
 
+var jwtOptions = services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>();
+
+services.AddApiAuthentication(jwtOptions);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -45,6 +50,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthentication();
 

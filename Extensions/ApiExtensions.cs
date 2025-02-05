@@ -12,7 +12,7 @@ namespace API.Extensions
 {
     public static class ApiExtensions
     {
-        public static void AddApiAuthentification(
+        public static void AddApiAuthentication(
             this IServiceCollection services,
             IOptions<JwtOptions> jwtOptions
         )

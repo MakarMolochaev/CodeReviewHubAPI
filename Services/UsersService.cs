@@ -36,6 +36,13 @@ namespace API.Services
             return user.Id;
         }
 
+        public async Task<User> Get(Guid id)
+        {
+            var user = await _usersRepository.GetById(id);
+
+            return user;
+        }
+
         public async Task<string> Login(string email, string password)
         {
             var user = await _usersRepository.GetByEmail(email);

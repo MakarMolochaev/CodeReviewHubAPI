@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using API.Abstract;
 using API.Abstract.Service;
 using API.Contracts;
+using API.Infrastructure;
 using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +19,20 @@ namespace API.Controllers
     public class CodePublicationController : ControllerBase
     {
         private readonly ICodePublicationService _codePublicationService;
-
-        public CodePublicationController(ICodePublicationService codePublicationService)
+        private readonly IHttpContextAccessor _httpAccessor;
+        private readonly JwtProvider _jwtProvider;
+        private readonly UsersService _usersService;
+        public CodePublicationController(
+            ICodePublicationService codePublicationService,
+            IHttpContextAccessor httpAccessor,
+            JwtProvider jwtProvider,
+            UsersService usersService
+        )
         {
             _codePublicationService = codePublicationService;
+            _httpAccessor = httpAccessor;
+            _jwtProvider = jwtProvider;
+            _usersService = usersService;
         }
 
         [HttpGet]
@@ -53,15 +65,17 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreatePublication([FromBody] CodePublicationRequest request)
         {
+            var jwtToken = _httpAccessor.HttpContext.Request.Cookies["ZOV"];
+            var creatorId = _jwtProvider.ExtractUserIdFromToken(jwtToken).Value;
+
             var codePublication = new CodePublication(
                 Guid.NewGuid(),
                 request.Description,
                 request.Code,
                 request.Lang,
                 request.rating,
-                request.creatorId, //Id должен получаться не из запроса, а из JWT токена
-                new User(),
-                /*_userService.Get(request.creatorId)*/
+                creatorId,
+                await _usersService.Get(request.creatorId),
                 DateTime.Now.ToUniversalTime()
             );
 

@@ -38,5 +38,41 @@ namespace API.Infrastructure
 
             return tokenValue;
         }
+
+        public Guid? ExtractUserIdFromToken(string token)
+        {
+            try
+            {
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+    
+                var tokenValidationParams = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = securityKey,
+                    ValidateLifetime = false,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+    
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var principal = tokenHandler.ValidateToken(token, tokenValidationParams, out _);
+                
+                var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == "userId");
+                if (userIdClaim == null)
+                    return null;
+    
+                if (!Guid.TryParse(userIdClaim.Value, out Guid userId))
+                    return null;
+    
+                return userId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token parsing error: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

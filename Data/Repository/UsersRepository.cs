@@ -18,6 +18,8 @@ namespace API.Data.Repository
         }
         public async Task<Guid> Add(User user)
         {
+            //await _context.Users.ExecuteDeleteAsync();
+            //return new Guid();
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
@@ -29,6 +31,16 @@ namespace API.Data.Repository
             var user = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
+
+
+            return user;
+        }
+
+        public async Task<User> GetById(Guid id)
+        {
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id);
 
 
             return user;
