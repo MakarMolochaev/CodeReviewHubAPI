@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace API.Contracts
 {
     public record CodePublicationResponse(
@@ -10,6 +5,7 @@ namespace API.Contracts
         string Description,
         string Code,
         string Lang,
+        decimal rating,
         DateTime PostedTime
     );
 }

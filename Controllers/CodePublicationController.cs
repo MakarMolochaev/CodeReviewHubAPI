@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Abstract;
 using API.Abstract.Service;
 using API.Contracts;
 using API.Infrastructure;
 using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -40,7 +34,7 @@ namespace API.Controllers
         {
             var codePublications = await _codePublicationService.GetAllPublications();
 
-            var response = codePublications.Select(el => new CodePublicationResponse(el.Id, el.Description, el.Code, el.Lang, el.PostedDate));
+            var response = codePublications.Select(el => new CodePublicationResponse(el.Id, el.Description, el.Code, el.Lang, el. Rating, el.PostedDate));
 
             return Ok(response);
         }
@@ -55,6 +49,7 @@ namespace API.Controllers
                 publication.Description,
                 publication.Code,
                 publication.Lang,
+                publication.Rating,
                 publication.PostedDate
             );
 
@@ -73,9 +68,9 @@ namespace API.Controllers
                 request.Description,
                 request.Code,
                 request.Lang,
-                request.rating,
+                0,
                 creatorId,
-                await _usersService.Get(request.creatorId),
+                await _usersService.Get(creatorId),
                 DateTime.Now.ToUniversalTime()
             );
 

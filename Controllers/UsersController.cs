@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Abstract.Service;
 using API.Contracts;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;

@@ -259,3 +259,5 @@ nuget.config
 *.vs/
 *.csproj.user
 *.userpref
+
+.omnisharp.json

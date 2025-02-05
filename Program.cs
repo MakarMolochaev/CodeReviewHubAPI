@@ -22,7 +22,8 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 services.AddDbContext<CodeReviewHubDbContext>(
-    options => {
+    options =>
+    {
         options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(CodeReviewHubDbContext)));
     }
 );
@@ -59,7 +60,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors(x => 
+app.UseCors(x =>
 {
     x.WithHeaders().AllowAnyHeader();
     x.WithOrigins("http://localhost:3000");
