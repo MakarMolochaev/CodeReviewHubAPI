@@ -261,3 +261,4 @@ nuget.config
 *.userpref
 
 .omnisharp.json
+docfx.json

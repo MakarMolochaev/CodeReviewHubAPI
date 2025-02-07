@@ -30,7 +30,7 @@ namespace API.Controllers
             var token = await _usersService.Login(request.Email, request.Password);
 
             //_httpContext.HttpContext.Response.Cookies.Append("КУКИ!! СТЁПА УМЕР", token);
-            _httpAccessor.HttpContext?.Response.Cookies.Append("ZOV", token);
+            _httpAccessor.HttpContext?.Response.Cookies.Append("Authentication", token);
 
             return Ok();
         }

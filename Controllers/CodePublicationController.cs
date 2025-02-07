@@ -40,7 +40,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<List<CodePublicationResponse>>> GetPublication(Guid id)
+        public async Task<ActionResult<CodePublicationResponse>> GetPublication(Guid id)
         {
             var publication = await _codePublicationService.GetPublication(id);
 
@@ -60,7 +60,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreatePublication([FromBody] CodePublicationRequest request)
         {
-            var jwtToken = _httpAccessor.HttpContext.Request.Cookies["ZOV"];
+            var jwtToken = _httpAccessor.HttpContext.Request.Cookies["Authentication"];
             var creatorId = _jwtProvider.ExtractUserIdFromToken(jwtToken).Value;
 
             var codePublication = new CodePublication(
