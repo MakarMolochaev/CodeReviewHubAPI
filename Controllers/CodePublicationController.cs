@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/publication")]
+    [Route("api/v1/publication/")]
     public class CodePublicationController : ControllerBase
     {
         private readonly ICodePublicationService _codePublicationService;

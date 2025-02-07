@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/comment")]
+    [Route("api/v1/comment/")]
     public class CommentController
     {
         
