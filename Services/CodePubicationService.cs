@@ -23,7 +23,7 @@ namespace API.Services
             return await _publicationRepository.GetAll();
         }
 
-        public async Task<CodePublication> GetPublication(Guid id)
+        public async Task<CodePublication?> GetPublication(Guid id)
         {
             return await _publicationRepository.Get(id);
         }

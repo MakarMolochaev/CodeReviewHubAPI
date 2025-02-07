@@ -21,7 +21,7 @@ namespace API.Data.Repository
             return codePublications;
         }
 
-        public async Task<CodePublication> Get(Guid id)
+        public async Task<CodePublication?> Get(Guid id)
         {
             var codePublication = await _context.CodePublications
                 .FirstOrDefaultAsync(el => el.Id == id);

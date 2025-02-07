@@ -43,6 +43,8 @@ namespace API.Controllers
         public async Task<ActionResult<CodePublicationResponse>> GetPublication(Guid id)
         {
             var publication = await _codePublicationService.GetPublication(id);
+            if(publication == null)
+                return BadRequest("Publication is not exists");
 
             var response = new CodePublicationResponse(
                 publication.Id,
@@ -60,8 +62,17 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreatePublication([FromBody] CodePublicationRequest request)
         {
-            var jwtToken = _httpAccessor.HttpContext.Request.Cookies["Authentication"];
-            var creatorId = _jwtProvider.ExtractUserIdFromToken(jwtToken).Value;
+            var jwtToken = _httpAccessor?.HttpContext?.Request.Cookies["Authentication"];
+            if (jwtToken == null)
+                return BadRequest("JWT токен не найден в cookie");
+
+            var creatorId = _jwtProvider.ExtractUserIdFromToken(jwtToken);
+            if(!creatorId.HasValue)
+                return BadRequest("JWT токен некорректен");
+
+            var user = await _usersService.Get(creatorId.Value);
+            if (user == null)
+                return NotFound("Пользователь с указаным Id не найден");
 
             var codePublication = new CodePublication(
                 Guid.NewGuid(),
@@ -69,8 +80,8 @@ namespace API.Controllers
                 request.Code,
                 request.Lang,
                 0,
-                creatorId,
-                await _usersService.Get(creatorId),
+                creatorId.Value,
+                user,
                 DateTime.Now.ToUniversalTime()
             );
 

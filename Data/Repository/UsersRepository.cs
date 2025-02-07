@@ -30,12 +30,11 @@ namespace API.Data.Repository
             return user;
         }
 
-        public async Task<User> GetById(Guid id)
+        public async Task<User?> GetById(Guid id)
         {
             var user = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);
-
 
             return user;
         }
