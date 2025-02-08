@@ -9,7 +9,7 @@ namespace API.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; } = Guid.Empty;
         public string Text { get; set; } = string.Empty;
-        public Guid CreatorId { get; set; }
-        public User Creator { get; set; }
+        public Guid CreatorId { get; set; } = Guid.Empty;
+        public User Creator { get; set; } = new User();
     }
 }

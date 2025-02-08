@@ -52,8 +52,8 @@ namespace API.Services
 
         public async Task<string> Login(string email, string password)
         {
-            var user = await _usersRepository.GetByEmail(email);
-
+            var user = await _usersRepository.GetByEmail(email) ?? throw new Exception("Error 500");
+            
             var result = _passwordHasher.Verify(password, user.PasswordHash);
 
             if(result == false)

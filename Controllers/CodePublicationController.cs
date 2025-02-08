@@ -34,7 +34,15 @@ namespace API.Controllers
         {
             var codePublications = await _codePublicationService.GetAllPublications();
 
-            var response = codePublications.Select(el => new CodePublicationResponse(el.Id, el.Description, el.Code, el.Lang, el. Rating, el.PostedDate, el.CreatorId));
+            var response = codePublications.Select(el => new CodePublicationResponse(
+                el.Id,
+                el.Description,
+                el.Code,
+                el.Lang,
+                el.Rating,
+                el.PostedDate,
+                new UserResponse(el.Creator.Username, el.CreatorId)
+            ));
 
             return Ok(response);
         }
@@ -53,7 +61,7 @@ namespace API.Controllers
                 publication.Lang,
                 publication.Rating,
                 publication.PostedDate,
-                publication.CreatorId
+                new UserResponse(publication.Creator.Username, publication.CreatorId)
             );
 
             return Ok(response);

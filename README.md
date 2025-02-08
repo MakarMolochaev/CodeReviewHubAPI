@@ -62,12 +62,16 @@ REST API для системы обзоров и обсёров кода
 ```json
 [
   {
-    "id": "guid",
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "description": "string",
     "code": "string",
     "lang": "string",
     "rating": 0,
-    "postedTime": "time"
+    "postedTime": "2025-02-08T09:50:23.830Z",
+    "creator": {
+      "username": "string",
+      "id": "string"
+    }
   }
 ]
 ```
@@ -107,12 +111,15 @@ REST API для системы обзоров и обсёров кода
 ### Ответ
 ```json
 {
-    "id": "guid",
-    "description": "string",
-    "code": "string",
-    "lang": "string",
-    "rating": 0,
-    "postedTime": "time"
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "description": "string",
+  "code": "string",
+  "lang": "string",
+  "rating": 0,
+  "postedTime": "2025-02-08T09:51:44.636Z",
+  "creator": {
+    "username": "string"
+  }
 }
 ```
 

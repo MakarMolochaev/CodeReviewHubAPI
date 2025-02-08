@@ -16,12 +16,17 @@ namespace API.Data.Repository
         public async Task<List<CodePublication>> GetAll()
         {
             //аварийный дроп
-            //await _context.CodePublications.ExecuteDeleteAsync();
-            //await _context.Users.ExecuteDeleteAsync();
-            //await _context.Comments.ExecuteDeleteAsync();
-            //await _context.SaveChangesAsync();
+            
+            /*
+            await _context.CodePublications.ExecuteDeleteAsync();
+            await _context.Users.ExecuteDeleteAsync();
+            await _context.Comments.ExecuteDeleteAsync();
+            await _context.SaveChangesAsync();
+            */
 
             var codePublications = await _context.CodePublications
+                .AsNoTracking()
+                .Include(cp => cp.Creator)
                 .ToListAsync();
 
             return codePublications;
@@ -30,6 +35,8 @@ namespace API.Data.Repository
         public async Task<CodePublication?> Get(Guid id)
         {
             var codePublication = await _context.CodePublications
+                .AsNoTracking()
+                .Include(cp => cp.Creator)
                 .FirstOrDefaultAsync(el => el.Id == id);
 
             return codePublication;

@@ -31,6 +31,10 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginUserRequest request)
         {
+            var user = await _usersService.GetByEmail(request.Email);
+            if(user == null)
+                return BadRequest("User with this email is not exitsts");
+            
             var token = await _usersService.Login(request.Email, request.Password);
 
             //_httpContext.HttpContext.Response.Cookies.Append("КУКИ!! СТЁПА УМЕР", token);

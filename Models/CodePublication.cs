@@ -33,7 +33,7 @@ namespace API.Models
         public decimal Rating { get; set; }
         public List<Comment> Comments { get; set; } = [];
         public DateTime PostedDate { get; set; }
-        public Guid CreatorId { get; set; }
-        public User Creator { get; set; }
+        public Guid CreatorId { get; set; } = Guid.Empty;
+        public User Creator { get; set; } = new User();
     }
 }

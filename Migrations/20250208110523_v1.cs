@@ -15,7 +15,7 @@ namespace API.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "GEN_RANDOM_UUID()"),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false)
@@ -29,7 +29,7 @@ namespace API.Migrations
                 name: "CodePublications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "GEN_RANDOM_UUID()"),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Code = table.Column<string>(type: "text", nullable: false),
                     Lang = table.Column<string>(type: "text", nullable: false),
@@ -52,7 +52,7 @@ namespace API.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "GEN_RANDOM_UUID()"),
                     Text = table.Column<string>(type: "text", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uuid", nullable: false),
                     CodePublicationId = table.Column<Guid>(type: "uuid", nullable: true)
