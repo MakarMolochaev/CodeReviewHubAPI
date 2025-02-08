@@ -20,11 +20,11 @@ namespace API.Data.Repository
             return user.Id;
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User?> GetByEmail(string email)
         {
             var user = await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
+                .FirstOrDefaultAsync(u => u.Email == email);
 
 
             return user;

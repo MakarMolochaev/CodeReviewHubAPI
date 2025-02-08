@@ -30,7 +30,7 @@ namespace API.Extensions
                     {
                         OnMessageReceived = context =>
                         {
-                            context.Token = context.Request.Cookies["ZOV"];
+                            context.Token = context.Request.Cookies["Authentication"];
                             return Task.CompletedTask;
                         }
                     };

@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace API.Models
 {
     public class CodePublication
     {
         public CodePublication() { }
         public CodePublication(
-            Guid id,
             string description,
             string code,
             string lang,
@@ -14,7 +15,6 @@ namespace API.Models
             DateTime postedDate
         )
         {
-            Id = id;
             Description = description;
             Code = code;
             Lang = lang;
@@ -24,7 +24,9 @@ namespace API.Models
             PostedDate = postedDate;
         }
 
-        public Guid Id { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; } = Guid.Empty;
         public string Description { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Lang { get; set; } = string.Empty;

@@ -11,30 +11,41 @@ namespace API.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "CreatorId",
-                table: "CodePublications",
-                type: "uuid",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AddColumn<decimal>(
-                name: "Rating",
-                table: "CodePublications",
-                type: "numeric",
-                nullable: false,
-                defaultValue: 0m);
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Nickname = table.Column<string>(type: "text", nullable: false)
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CodePublications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    Lang = table.Column<string>(type: "text", nullable: false),
+                    Rating = table.Column<decimal>(type: "numeric", nullable: false),
+                    PostedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CodePublications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CodePublications_Users_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,40 +87,19 @@ namespace API.Migrations
                 name: "IX_Comments_CreatorId",
                 table: "Comments",
                 column: "CreatorId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_CodePublications_Users_CreatorId",
-                table: "CodePublications",
-                column: "CreatorId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_CodePublications_Users_CreatorId",
-                table: "CodePublications");
-
             migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "CodePublications");
+
+            migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropIndex(
-                name: "IX_CodePublications_CreatorId",
-                table: "CodePublications");
-
-            migrationBuilder.DropColumn(
-                name: "CreatorId",
-                table: "CodePublications");
-
-            migrationBuilder.DropColumn(
-                name: "Rating",
-                table: "CodePublications");
         }
     }
 }

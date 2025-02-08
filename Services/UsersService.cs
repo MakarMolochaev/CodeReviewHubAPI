@@ -29,16 +29,23 @@ namespace API.Services
         {
             var hashedPassword = _passwordHasher.Generate(password);
 
-            var user = new User(Guid.NewGuid(), username, email, hashedPassword);
+            var user = new User(username, email, hashedPassword);
 
             await _usersRepository.Add(user);
 
             return user.Id;
         }
 
-        public async Task<User> Get(Guid id)
+        public async Task<User?> Get(Guid id)
         {
             var user = await _usersRepository.GetById(id);
+
+            return user;
+        }
+
+        public async Task<User?> GetByEmail(string email)
+        {
+            var user = await _usersRepository.GetByEmail(email);
 
             return user;
         }

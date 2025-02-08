@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Migrations
 {
     [DbContext(typeof(CodeReviewHubDbContext))]
-    [Migration("20250204080946_v2")]
-    partial class v2
+    [Migration("20250208085815_v3")]
+    partial class v3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,8 @@ namespace API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("GEN_RANDOM_UUID()");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -63,7 +64,8 @@ namespace API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("GEN_RANDOM_UUID()");
 
                     b.Property<Guid?>("CodePublicationId")
                         .HasColumnType("uuid");
@@ -88,7 +90,8 @@ namespace API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("GEN_RANDOM_UUID()");
 
                     b.Property<string>("Email")
                         .IsRequired()

@@ -6,6 +6,7 @@ namespace API.Contracts
         string Code,
         string Lang,
         decimal rating,
-        DateTime PostedTime
+        DateTime PostedTime,
+        Guid CreatorId
     );
 }

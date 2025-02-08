@@ -34,7 +34,7 @@ namespace API.Controllers
         {
             var codePublications = await _codePublicationService.GetAllPublications();
 
-            var response = codePublications.Select(el => new CodePublicationResponse(el.Id, el.Description, el.Code, el.Lang, el. Rating, el.PostedDate));
+            var response = codePublications.Select(el => new CodePublicationResponse(el.Id, el.Description, el.Code, el.Lang, el. Rating, el.PostedDate, el.CreatorId));
 
             return Ok(response);
         }
@@ -52,7 +52,8 @@ namespace API.Controllers
                 publication.Code,
                 publication.Lang,
                 publication.Rating,
-                publication.PostedDate
+                publication.PostedDate,
+                publication.CreatorId
             );
 
             return Ok(response);
@@ -71,11 +72,11 @@ namespace API.Controllers
                 return BadRequest("JWT токен некорректен");
 
             var user = await _usersService.Get(creatorId.Value);
+
             if (user == null)
                 return NotFound("Пользователь с указаным Id не найден");
 
             var codePublication = new CodePublication(
-                Guid.NewGuid(),
                 request.Description,
                 request.Code,
                 request.Lang,
@@ -87,7 +88,7 @@ namespace API.Controllers
 
             var publicationId = await _codePublicationService.CreatePublication(codePublication);
 
-            return Ok(publicationId);
+            return Ok(new IdResponse(publicationId));
         }
 
         [HttpPut("{id:guid}")]
@@ -95,13 +96,14 @@ namespace API.Controllers
         {
             var publicationId = await _codePublicationService.UpdatePublication(id, request.Description, request.Code, request.Lang);
 
-            return Ok(publicationId);
+            return Ok(new IdResponse(publicationId));
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Guid>> DeletePublication(Guid id)
         {
-            return Ok(await _codePublicationService.DeletePublication(id));
+            await _codePublicationService.DeletePublication(id);
+            return Ok();
         }
     }
 }

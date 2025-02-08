@@ -37,6 +37,8 @@ services.AddDbContext<CodeReviewHubDbContext>(
 //builder.Ыervices.AddScoped<ICodePublicationRepository, CodePublicationRepository>();
 services.AddScoped<ICodePublicationRepository, CodePublicationRepository>();
 services.AddScoped<ICodePublicationService, CodePubicationService>();
+services.AddScoped<ICommentRepository, CommentRepository>();
+services.AddScoped<ICommentService, CommentService>();
 services.AddScoped<UsersRepository>();
 services.AddScoped<UsersService>();
 services.AddScoped<JwtProvider>();

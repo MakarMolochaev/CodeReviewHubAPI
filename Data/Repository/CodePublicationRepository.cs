@@ -15,6 +15,12 @@ namespace API.Data.Repository
 
         public async Task<List<CodePublication>> GetAll()
         {
+            //аварийный дроп
+            //await _context.CodePublications.ExecuteDeleteAsync();
+            //await _context.Users.ExecuteDeleteAsync();
+            //await _context.Comments.ExecuteDeleteAsync();
+            //await _context.SaveChangesAsync();
+
             var codePublications = await _context.CodePublications
                 .ToListAsync();
 
@@ -31,6 +37,7 @@ namespace API.Data.Repository
 
         public async Task<Guid> Create(CodePublication codePublication)
         {
+            _context.Users.Attach(codePublication.Creator);
             await _context.CodePublications.AddAsync(codePublication);
             await _context.SaveChangesAsync();
 

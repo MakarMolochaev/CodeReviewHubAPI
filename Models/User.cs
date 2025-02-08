@@ -1,20 +1,23 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace API.Models
 {
     public class User
     {
         public User() { }
 
-        public User(Guid id, string username, string email, string passwordHash) 
+        public User(string username, string email, string passwordHash) 
         {
-            Id = id;
             Username = username;
             Email = email;
             PasswordHash = passwordHash;
         }
-        public Guid Id { get; set; }
+        
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; } = Guid.Empty;
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
-        public List<CodePublication> Publications { get; set; } = [];
+        public List<CodePublication> Publications { get; set; } = new List<CodePublication>();
     }
 }

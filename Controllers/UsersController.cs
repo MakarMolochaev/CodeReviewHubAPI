@@ -19,9 +19,13 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(RegisterUserRequest request)
         {
+            var userIfExists = await _usersService.GetByEmail(request.Email);
+            if(userIfExists != null)
+                return Ok("User with this email is exists already.");
+            
             var userId = await _usersService.Register(request.Username, request.Email, request.Password);
 
-            return Ok(userId);
+            return Ok(new IdResponse(userId));
         }
 
         [HttpPost("login")]

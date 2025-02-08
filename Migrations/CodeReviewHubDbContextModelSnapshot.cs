@@ -26,7 +26,8 @@ namespace API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("GEN_RANDOM_UUID()");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -60,7 +61,8 @@ namespace API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("GEN_RANDOM_UUID()");
 
                     b.Property<Guid?>("CodePublicationId")
                         .HasColumnType("uuid");
@@ -85,7 +87,8 @@ namespace API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("GEN_RANDOM_UUID()");
 
                     b.Property<string>("Email")
                         .IsRequired()
