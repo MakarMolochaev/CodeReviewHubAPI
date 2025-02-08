@@ -30,6 +30,10 @@ namespace API.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
 
+
+
+
+
             modelBuilder.Entity<User>(eb =>
             {
                 eb.HasKey(u => u.Id);
@@ -38,6 +42,12 @@ namespace API.Data
                     .HasDefaultValueSql("GEN_RANDOM_UUID()")
                     .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Throw);
             });
+
+
+
+
+
+
 
             modelBuilder.Entity<CodePublication>(eb =>
             {
@@ -48,6 +58,23 @@ namespace API.Data
                     .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Throw);
             });
 
+            modelBuilder.Entity<CodePublication>()
+                .Property(b => b.RatedUsers)
+                .HasDefaultValueSql("ARRAY[]::uuid[]");
+            
+            modelBuilder.Entity<CodePublication>()
+                .Property(b => b.Rating)
+                .IsRequired();
+            /*
+            modelBuilder.Entity<CodePublication>()
+            .Property(u => u.RatedUsers)
+            .HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(g => Guid.Parse(g)).ToList());
+            */
+
+
             modelBuilder.Entity<Comment>(eb =>
             {
                 eb.HasKey(u => u.Id);
@@ -56,6 +83,10 @@ namespace API.Data
                     .HasDefaultValueSql("GEN_RANDOM_UUID()")
                     .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Throw);
             });
+
+            modelBuilder.Entity<CodePublication>()
+                .Property(b => b.RatedUsers)
+                .HasDefaultValueSql("ARRAY[]::uuid[]");
         }
     }
 }

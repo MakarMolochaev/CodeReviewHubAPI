@@ -42,5 +42,20 @@ namespace API.Controllers
 
             return Ok();
         }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<UserResponse>> Get(Guid id)
+        {
+            var user = await _usersService.Get(id) ?? throw new Exception("User is null");
+            return Ok(new UserResponse(user.Username, user.Id));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<UserResponse>> GetAll()
+        {
+            var users = await _usersService.GetAll();
+
+            return Ok(users.Select(u => new UserResponse(u.Username, u.Id)));
+        }
     }
 }

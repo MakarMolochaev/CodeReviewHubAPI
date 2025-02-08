@@ -11,5 +11,6 @@ namespace API.Models
         public string Text { get; set; } = string.Empty;
         public Guid CreatorId { get; set; } = Guid.Empty;
         public User Creator { get; set; } = new User();
+        public List<Guid> RatedUsers { get; set; } = new List<Guid>();
     }
 }

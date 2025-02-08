@@ -7,6 +7,7 @@ namespace API.Contracts
         string Lang,
         decimal rating,
         DateTime PostedTime,
-        UserResponse Creator
+        UserResponse Creator,
+        List<Guid> RatedUsers
     );
 }

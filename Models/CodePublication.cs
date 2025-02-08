@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
@@ -31,9 +32,10 @@ namespace API.Models
         public string Code { get; set; } = string.Empty;
         public string Lang { get; set; } = string.Empty;
         public decimal Rating { get; set; }
-        public List<Comment> Comments { get; set; } = [];
+        public List<Comment> Comments { get; set; } = new List<Comment>();
         public DateTime PostedDate { get; set; }
         public Guid CreatorId { get; set; } = Guid.Empty;
         public User Creator { get; set; } = new User();
+        public List<Guid> RatedUsers { get; set; } = new List<Guid>();
     }
 }

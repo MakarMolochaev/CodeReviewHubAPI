@@ -16,17 +16,20 @@ namespace API.Controllers
         private readonly IHttpContextAccessor _httpAccessor;
         private readonly JwtProvider _jwtProvider;
         private readonly UsersService _usersService;
+        private readonly JwtService _jwtService;
         public CodePublicationController(
             ICodePublicationService codePublicationService,
             IHttpContextAccessor httpAccessor,
             JwtProvider jwtProvider,
-            UsersService usersService
+            UsersService usersService,
+            JwtService jwtService
         )
         {
             _codePublicationService = codePublicationService;
             _httpAccessor = httpAccessor;
             _jwtProvider = jwtProvider;
             _usersService = usersService;
+            _jwtService = jwtService;
         }
 
         [HttpGet]
@@ -41,7 +44,8 @@ namespace API.Controllers
                 el.Lang,
                 el.Rating,
                 el.PostedDate,
-                new UserResponse(el.Creator.Username, el.CreatorId)
+                new UserResponse(el.Creator.Username, el.CreatorId),
+                el.RatedUsers
             ));
 
             return Ok(response);
@@ -61,7 +65,8 @@ namespace API.Controllers
                 publication.Lang,
                 publication.Rating,
                 publication.PostedDate,
-                new UserResponse(publication.Creator.Username, publication.CreatorId)
+                new UserResponse(publication.Creator.Username, publication.CreatorId),
+                publication.RatedUsers
             );
 
             return Ok(response);
@@ -71,26 +76,20 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreatePublication([FromBody] CodePublicationRequest request)
         {
-            var jwtToken = _httpAccessor?.HttpContext?.Request.Cookies["Authentication"];
-            if (jwtToken == null)
-                return BadRequest("JWT токен не найден в cookie");
+            var jwtDecode = await _jwtService.GetUserFromJwt(_httpAccessor, _jwtProvider);
 
-            var creatorId = _jwtProvider.ExtractUserIdFromToken(jwtToken);
-            if(!creatorId.HasValue)
-                return BadRequest("JWT токен некорректен");
-
-            var user = await _usersService.Get(creatorId.Value);
-
-            if (user == null)
-                return NotFound("Пользователь с указаным Id не найден");
+            if(jwtDecode.user == null)
+            {
+                return BadRequest(jwtDecode.error);
+            }
 
             var codePublication = new CodePublication(
                 request.Description,
                 request.Code,
                 request.Lang,
                 0,
-                creatorId.Value,
-                user,
+                jwtDecode.user.Id,
+                jwtDecode.user,
                 DateTime.Now.ToUniversalTime()
             );
 

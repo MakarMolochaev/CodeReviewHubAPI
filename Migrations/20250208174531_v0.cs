@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class v1 : Migration
+    public partial class v0 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +36,8 @@ namespace API.Migrations
                     Lang = table.Column<string>(type: "text", nullable: false),
                     Rating = table.Column<decimal>(type: "numeric", nullable: false),
                     PostedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uuid", nullable: false)
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RatedUsers = table.Column<List<Guid>>(type: "uuid[]", nullable: false, defaultValueSql: "ARRAY[]::uuid[]")
                 },
                 constraints: table =>
                 {
@@ -55,6 +57,7 @@ namespace API.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "GEN_RANDOM_UUID()"),
                     Text = table.Column<string>(type: "text", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RatedUsers = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
                     CodePublicationId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>

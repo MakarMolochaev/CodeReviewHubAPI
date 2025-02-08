@@ -38,5 +38,14 @@ namespace API.Data.Repository
 
             return user;
         }
+
+        public async Task<List<User>> GetAll()
+        {
+            var users = await _context.Users
+                .AsNoTracking()
+                .ToListAsync();
+
+            return users;
+        }
     }
 }

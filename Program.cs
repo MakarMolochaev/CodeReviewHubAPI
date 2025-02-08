@@ -42,9 +42,11 @@ services.AddScoped<ICommentService, CommentService>();
 services.AddScoped<UsersRepository>();
 services.AddScoped<UsersService>();
 services.AddScoped<JwtProvider>();
+services.AddScoped<RatingService>();
+services.AddScoped<JwtService>();
 services.AddHttpContextAccessor();
 services.AddScoped<IPasswordHasher, PaswordHasher>();
-//services.AddApiAuthentification();
+services.AddScoped<CodeReviewHubDbContext>();
 
 var jwtOptions = services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>();
 
