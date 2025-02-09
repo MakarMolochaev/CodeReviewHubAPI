@@ -23,11 +23,17 @@ namespace API.Services
 
             var jwtToken = _httpAccessor?.HttpContext?.Request.Cookies["Authentication"];
             if (jwtToken == null)
+            {
                 _error = "JWT токен не найден в cookie";
+                return (null, _error);
+            }
 
             var creatorId = _jwtProvider.ExtractUserIdFromToken(jwtToken);
             if(!creatorId.HasValue)
+            {
                 _error = "JWT токен некорректен";
+                return (null, _error);
+            }
 
             var _user = await _usersService.Get(creatorId.Value);
 
