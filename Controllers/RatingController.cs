@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/v1/publication/")]
+    [Route("api/v1/")]
     public class RatingController : ControllerBase
     {
         public readonly RatingService _ratingService;
@@ -31,7 +31,7 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPost("{id:guid}/rate")]
+        [HttpPost("publication/{id:guid}/rate")]
         public async Task<IActionResult> RatePublication(Guid id)
         {
             var jwtDecode = await _jwtService.GetUserFromJwt(_httpAccessor, _jwtProvider);
@@ -46,7 +46,7 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPost("{id:guid}/unrate")]
+        [HttpPost("publication/{id:guid}/unrate")]
         public async Task<IActionResult> UnratePublication(Guid id)
         {
             var jwtDecode = await _jwtService.GetUserFromJwt(_httpAccessor, _jwtProvider);

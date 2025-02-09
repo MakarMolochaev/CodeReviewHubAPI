@@ -17,9 +17,9 @@ namespace API.Services
             _commentRespository = commentRepository;
         }
 
-        public async Task<Guid> CreateComment(Comment codePublication)
+        public async Task<Guid> CreateComment(Comment comment)
         {
-            var id = await _commentRespository.Create(codePublication);
+            var id = await _commentRespository.Create(comment);
             return id;
         }
 

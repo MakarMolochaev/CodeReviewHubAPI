@@ -1,3 +1,4 @@
+using System.Text.Json;
 using API.Abstract;
 using API.Abstract.Auth;
 using API.Abstract.Repository;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -57,7 +59,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
+
+    var swaggerProvider = app.Services.GetService<ISwaggerProvider>();
+    var swaggerDoc = swaggerProvider.GetSwagger("v1");
+    
+    var outputPath = Path.Combine(Directory.GetCurrentDirectory(), "Docs", "swagger.json");
+    var json = JsonSerializer.Serialize(swaggerDoc, new JsonSerializerOptions { WriteIndented = true });
+    File.WriteAllText(outputPath, json);
 }
 
 app.UseHttpsRedirection();
