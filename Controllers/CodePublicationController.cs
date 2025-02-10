@@ -98,19 +98,61 @@ namespace API.Controllers
             return Ok(new IdResponse(publicationId));
         }
 
+        [Authorize]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<Guid>> UpdatePublication(Guid id, [FromBody] CodePublicationRequest request)
         {
-            var publicationId = await _codePublicationService.UpdatePublication(id, request.Description, request.Code, request.Lang);
+            var jwtDecode = await _jwtService.GetUserFromJwt(_httpAccessor, _jwtProvider);
 
-            return Ok(new IdResponse(publicationId));
+            if(jwtDecode.user == null)
+            {
+                return BadRequest(jwtDecode.error);
+            }
+
+            var publication = await _codePublicationService.GetPublication(id);
+            if(publication == null)
+            {
+                return NotFound();
+            }
+
+            if(publication.CreatorId != jwtDecode.user.Id)
+            {
+                return Forbid();
+            }
+            else
+            {
+                var publicationId = await _codePublicationService.UpdatePublication(id, request.Description, request.Code, request.Lang);
+                return Ok(new IdResponse(publicationId));
+            }
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Guid>> DeletePublication(Guid id)
         {
-            await _codePublicationService.DeletePublication(id);
-            return Ok();
+            var jwtDecode = await _jwtService.GetUserFromJwt(_httpAccessor, _jwtProvider);
+
+            if(jwtDecode.user == null)
+            {
+                return BadRequest(jwtDecode.error);
+            }
+
+            var publication = await _codePublicationService.GetPublication(id);
+            if(publication == null)
+            {
+                return NotFound();
+            }
+
+            
+            if(publication.CreatorId != jwtDecode.user.Id)
+            {
+                return Forbid();
+            }
+            else
+            {
+                await _codePublicationService.DeletePublication(id);
+                return Ok();
+            }
         }
     }
 }

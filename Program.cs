@@ -8,11 +8,9 @@ using API.Data.Repository;
 using API.Extensions;
 using API.Infrastructure;
 using API.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
