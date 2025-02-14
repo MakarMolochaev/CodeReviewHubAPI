@@ -262,3 +262,4 @@ nuget.config
 
 .omnisharp.json
 docfx.json
+redis_data/
