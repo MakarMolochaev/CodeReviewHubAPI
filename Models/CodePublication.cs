@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Contracts;
 
 namespace API.Models
 {
@@ -37,5 +38,19 @@ namespace API.Models
         public Guid CreatorId { get; set; } = Guid.Empty;
         public User Creator { get; set; } = new User();
         public List<Guid> RatedUsers { get; set; } = new List<Guid>();
+
+        public CodePublicationResponse ToResponse()
+        {
+            return new CodePublicationResponse(
+                Id,
+                Description,
+                Code,
+                Lang,
+                Rating,
+                PostedDate,
+                new UserResponse(Creator.Username, CreatorId),
+                RatedUsers
+            );
+        }
     }
 }

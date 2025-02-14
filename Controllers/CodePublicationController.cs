@@ -37,16 +37,7 @@ namespace API.Controllers
         {
             var codePublications = await _codePublicationService.GetAllPublications();
 
-            var response = codePublications.Select(el => new CodePublicationResponse(
-                el.Id,
-                el.Description,
-                el.Code,
-                el.Lang,
-                el.Rating,
-                el.PostedDate,
-                new UserResponse(el.Creator.Username, el.CreatorId),
-                el.RatedUsers
-            ));
+            var response = codePublications.Select(el => el.ToResponse());
 
             return Ok(response);
         }

@@ -1,13 +1,13 @@
-namespace API.Contracts
+namespace API.Contracts.Caching
 {
-    public record CodePublicationResponse(
+    public record CachedCodePublication(
         Guid Id,
         string Description,
         string Code,
         string Lang,
         decimal rating,
         DateTime PostedTime,
-        UserResponse Creator,
+        CachedUser Creator,
         List<Guid> RatedUsers
     );
 }

@@ -9,6 +9,7 @@ using API.Extensions;
 using API.Infrastructure;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
@@ -47,6 +48,13 @@ services.AddScoped<JwtService>();
 services.AddHttpContextAccessor();
 services.AddScoped<IPasswordHasher, PaswordHasher>();
 services.AddScoped<CodeReviewHubDbContext>();
+//services.AddScoped<IDistributedCache>();
+
+services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+    options.InstanceName = "";
+});
 
 var jwtOptions = services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>();
 

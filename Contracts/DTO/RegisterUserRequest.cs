@@ -1,4 +1,4 @@
-namespace API.Contracts
+namespace API.Contracts.DTO
 {
     public record RegisterUserRequest(
         string Username,
