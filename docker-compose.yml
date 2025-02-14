@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-  postgres:
+  db:
     image: postgres:latest
-    container_name: CodeReviewHub_Db
+    container_name: CodeReviewHub-Db
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "12345"
@@ -37,6 +37,16 @@ services:
     restart: unless-stopped
     tty: true
     stdin_open: true
+  CodeReviewHub-API:
+    image: codereviewhub-api-image
+    container_name: CodeReviewHub-API
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5024:80"
+    depends_on:
+      - db
 
 volumes:
   pgdata:

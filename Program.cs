@@ -8,6 +8,7 @@ using API.Data.Repository;
 using API.Extensions;
 using API.Infrastructure;
 using API.Services;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -51,7 +52,7 @@ services.AddScoped<CodeReviewHubDbContext>();
 var jwtOptions = services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>();
 
 services.AddApiAuthentication(jwtOptions);
-
+        
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
