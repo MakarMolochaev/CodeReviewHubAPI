@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   db:
     image: postgres:latest
@@ -37,17 +35,19 @@ services:
     restart: unless-stopped
     tty: true
     stdin_open: true
+
+
   CodeReviewHub-API:
-    image: codereviewhub-api-image
+    image: makarmolochaev/codereviewhub-api:latest
     container_name: CodeReviewHub-API
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
-      - "5024:80"
+      - "80:80"
     depends_on:
       - db
-
+    command: >
+      sh -c "while ! nc -z db 5432; do echo 'Waiting for database...'; sleep 1; done;
+      dotnet ef database update;
+      dotnet API.dll"
 volumes:
   pgdata:
     driver: local

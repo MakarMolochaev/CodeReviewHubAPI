@@ -52,8 +52,14 @@ services.AddScoped<CodeReviewHubDbContext>();
 var jwtOptions = services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>();
 
 services.AddApiAuthentication(jwtOptions);
-        
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CodeReviewHubDbContext>();
+    dbContext.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
