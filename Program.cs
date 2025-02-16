@@ -1,5 +1,3 @@
-using System.Text.Json;
-using API.Abstract;
 using API.Abstract.Auth;
 using API.Abstract.Repository;
 using API.Abstract.Service;
@@ -8,7 +6,6 @@ using API.Data.Repository;
 using API.Extensions;
 using API.Infrastructure;
 using API.Services;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -48,6 +45,12 @@ services.AddScoped<JwtService>();
 services.AddHttpContextAccessor();
 services.AddScoped<IPasswordHasher, PaswordHasher>();
 services.AddScoped<CodeReviewHubDbContext>();
+
+services.AddStackExchangeRedisCache(options =>
+{
+     options.Configuration = builder.Configuration.GetConnectionString("localhost:6379");
+     options.InstanceName = "";                                         
+});
 
 var jwtOptions = services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>();
 

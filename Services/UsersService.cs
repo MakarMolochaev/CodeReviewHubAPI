@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using API.Abstract.Auth;
 using API.Abstract.Repository;
 using API.Abstract.Service;
+using API.Contracts;
 using API.Data.Repository;
+using API.Extensions;
 using API.Infrastructure;
 using API.Models;
 using Microsoft.AspNetCore.Identity;
@@ -36,25 +38,25 @@ namespace API.Services
             return user.Id;
         }
 
-        public async Task<User?> Get(Guid id)
+        public async Task<UserResponse?> Get(Guid id)
         {
             var user = await _usersRepository.GetById(id);
 
-            return user;
+            return user.ToResponse();
         }
 
-        public async Task<List<User>> GetAll()
+        public async Task<List<UserResponse>> GetAll()
         {
             var users = await _usersRepository.GetAll();
 
-            return users;
+            return users.Select(el => el.ToResponse()).ToList();
         }
 
-        public async Task<User?> GetByEmail(string email)
+        public async Task<UserResponse?> GetByEmail(string email)
         {
             var user = await _usersRepository.GetByEmail(email);
 
-            return user;
+            return user.ToResponse();
         }
 
         public async Task<string> Login(string email, string password)

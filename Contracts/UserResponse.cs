@@ -7,6 +7,6 @@ namespace API.Contracts
 {
     public record UserResponse(
         string Username,
-        Guid id
+        Guid Id
     );
 }

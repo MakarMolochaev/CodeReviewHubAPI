@@ -37,18 +37,7 @@ namespace API.Controllers
         {
             var codePublications = await _codePublicationService.GetAllPublications();
 
-            var response = codePublications.Select(el => new CodePublicationResponse(
-                el.Id,
-                el.Description,
-                el.Code,
-                el.Lang,
-                el.Rating,
-                el.PostedDate,
-                new UserResponse(el.Creator.Username, el.CreatorId),
-                el.RatedUsers
-            ));
-
-            return Ok(response);
+            return Ok(codePublications);
         }
 
         [HttpGet("{id:guid}")]
@@ -58,18 +47,7 @@ namespace API.Controllers
             if(publication == null)
                 return BadRequest("Publication is not exists");
 
-            var response = new CodePublicationResponse(
-                publication.Id,
-                publication.Description,
-                publication.Code,
-                publication.Lang,
-                publication.Rating,
-                publication.PostedDate,
-                new UserResponse(publication.Creator.Username, publication.CreatorId),
-                publication.RatedUsers
-            );
-
-            return Ok(response);
+            return Ok(publication);
         }
 
         [Authorize]
@@ -83,47 +61,9 @@ namespace API.Controllers
                 return BadRequest(jwtDecode.error);
             }
 
-            var codePublication = new CodePublication(
-                request.Description,
-                request.Code,
-                request.Lang,
-                0,
-                jwtDecode.user.Id,
-                jwtDecode.user,
-                DateTime.Now.ToUniversalTime()
-            );
-
-            var publicationId = await _codePublicationService.CreatePublication(codePublication);
+            var publicationId = await _codePublicationService.CreatePublication(request, jwtDecode.user);
 
             return Ok(new IdResponse(publicationId));
-        }
-
-        [Authorize]
-        [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Guid>> UpdatePublication(Guid id, [FromBody] CodePublicationRequest request)
-        {
-            var jwtDecode = await _jwtService.GetUserFromJwt(_httpAccessor, _jwtProvider);
-
-            if(jwtDecode.user == null)
-            {
-                return BadRequest(jwtDecode.error);
-            }
-
-            var publication = await _codePublicationService.GetPublication(id);
-            if(publication == null)
-            {
-                return NotFound();
-            }
-
-            if(publication.CreatorId != jwtDecode.user.Id)
-            {
-                return Forbid();
-            }
-            else
-            {
-                var publicationId = await _codePublicationService.UpdatePublication(id, request.Description, request.Code, request.Lang);
-                return Ok(new IdResponse(publicationId));
-            }
         }
 
         [Authorize]
@@ -144,7 +84,7 @@ namespace API.Controllers
             }
 
             
-            if(publication.CreatorId != jwtDecode.user.Id)
+            if(publication.Creator.Id != jwtDecode.user.Id)
             {
                 return Forbid();
             }

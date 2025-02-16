@@ -47,7 +47,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserResponse>> Get(Guid id)
         {
             var user = await _usersService.Get(id) ?? throw new Exception("User is null");
-            return Ok(new UserResponse(user.Username, user.Id));
+            return Ok(user);
         }
 
         [HttpGet]
